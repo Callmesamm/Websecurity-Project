@@ -29,7 +29,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'passwordd',
+        'passworddd',
         'remember_token',
     ];
 
