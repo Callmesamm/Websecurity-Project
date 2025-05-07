@@ -24,12 +24,13 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-         
-            return redirect('/home')->with('success', 'Login successful!');
-
+            $request->session()->regenerate();
+            return redirect()->intended('/home');
         }
-        return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
 
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
