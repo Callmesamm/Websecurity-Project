@@ -3,66 +3,53 @@
 @section('title', $movie->title)
 
 @section('content')
-<div class="container py-4">
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <img src="{{ $movie->image ? asset('storage/'.$movie->image) : 'https://via.placeholder.com/300x450?text=No+Image' }}" class="img-fluid rounded shadow-sm" alt="{{ $movie->title }}">
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="relative h-96">
+            <img src="{{ $movie->backdrop_url }}" alt="{{ $movie->title }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-8 text-white">
+                <h1 class="text-4xl font-bold mb-2">{{ $movie->title }}</h1>
+                <p class="text-xl mb-4">{{ $movie->tagline }}</p>
+                <div class="flex items-center space-x-4">
+                    <span class="text-yellow-500 text-xl">★ {{ number_format($movie->vote_average, 1) }}</span>
+                    <span>{{ $movie->release_date->format('Y') }}</span>
+                    <span>{{ $movie->runtime }} دقيقة</span>
+                </div>
+            </div>
         </div>
-        <div class="col-md-8">
-            <h2 class="fw-bold">{{ $movie->title }}</h2>
-            <div class="mb-2"><span class="text-warning">★ {{ number_format($movie->rating,1) }}/5</span> <span class="text-muted ms-2">{{ $movie->category }}</span></div>
-            <p><strong>Release Date:</strong> {{ $movie->release_date }}</p>
-            <p><strong>Duration:</strong> {{ $movie->duration }} min</p>
-            <p>{{ $movie->storyline }}</p>
+
+        <div class="p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-bold mb-4">القصة</h2>
+                    <p class="text-gray-700 mb-8">{{ $movie->overview }}</p>
+
+                    <h2 class="text-2xl font-bold mb-4">الممثلون</h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        @foreach($movie->actors as $actor)
+                            <div class="text-center">
+                                <img src="{{ $actor->profile_url }}" alt="{{ $actor->name }}" class="w-24 h-24 rounded-full mx-auto mb-2 object-cover">
+                                <h3 class="font-semibold">{{ $actor->name }}</h3>
+                                <p class="text-sm text-gray-600">{{ $actor->pivot->character_name }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="font-bold mb-2">معلومات الفيلم</h3>
+                        <ul class="space-y-2">
+                            <li><span class="font-semibold">الحالة:</span> {{ $movie->status }}</li>
+                            <li><span class="font-semibold">الميزانية:</span> ${{ number_format($movie->budget) }}</li>
+                            <li><span class="font-semibold">الإيرادات:</span> ${{ number_format($movie->revenue) }}</li>
+                            <li><span class="font-semibold">IMDB:</span> {{ $movie->imdb_id }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <h4 class="mb-3">Reserve your ticket!</h4>
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Date</th>
-                    <th>Start time</th>
-                    <th>End time</th>
-                    <th>Ticket price</th>
-                    <th>Remaining seats</th>
-                    <th>Reserve</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($movie->shows as $show)
-                <tr>
-                    <td>{{ $show->date }}</td>
-                    <td>{{ $show->start_time }}</td>
-                    <td>{{ $show->end_time }}</td>
-                    <td>{{ $show->price }} EGP</td>
-                    <td>{{ $show->available_seats }}/{{ $show->total_seats }}</td>
-                    <td>
-                        @if($show->available_seats > 0)
-                        <form method="POST" action="{{ route('reservations.store') }}" class="d-flex align-items-center gap-2">
-                            @csrf
-                            <input type="hidden" name="show_id" value="{{ $show->id }}">
-                            <input type="number" name="seat_number" min="1" max="{{ $show->total_seats }}" class="form-control form-control-sm" placeholder="Seat #" required style="width: 80px;">
-                            <button type="submit" class="btn btn-success btn-sm">Reserve</button>
-                        </form>
-                        @else
-                        <span class="text-danger">Full</span>
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @if(session('success'))
-        <div class="alert alert-success mt-3">{{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div class="alert alert-danger mt-3">
-            @foreach($errors->all() as $error)
-                <div>{{ $error }}</div>
-            @endforeach
-        </div>
-    @endif
 </div>
 @endsection 
