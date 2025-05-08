@@ -17,7 +17,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="{{ route('home') }}">
                 <img src="https://img.icons8.com/ios-filled/50/000000/movie-projector.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 CINEMAT
             </a>
@@ -26,15 +26,37 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Movies</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">What To Watch?</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
+                    @auth
+                        <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('movies.index') }}">Movies</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-link nav-link">Logout</button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
+                    @endauth
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container mt-4">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         @yield('content')
     </div>
     <!-- Bootstrap JS -->
