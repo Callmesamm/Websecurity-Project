@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Services\TMDBService;
 
 class Movie extends Model
 {
@@ -39,8 +40,7 @@ class Movie extends Model
     public function actors(): BelongsToMany
     {
         return $this->belongsToMany(Actor::class, 'movie_actor')
-            ->withPivot('character_name', 'order_number')
-            ->withTimestamps();
+            ->withPivot('character_name', 'order_number');
     }
 
     public function ratings(): HasMany

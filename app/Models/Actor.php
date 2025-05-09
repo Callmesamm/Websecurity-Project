@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Services\TMDBService;
 
 class Actor extends Model
 {
@@ -25,8 +26,7 @@ class Actor extends Model
     public function movies(): BelongsToMany
     {
         return $this->belongsToMany(Movie::class, 'movie_actor')
-            ->withPivot('character_name', 'order_number')
-            ->withTimestamps();
+            ->withPivot('character_name', 'order_number');
     }
 
     public function getProfileUrlAttribute()

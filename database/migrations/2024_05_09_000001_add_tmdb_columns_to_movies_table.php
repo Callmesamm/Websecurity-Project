@@ -12,10 +12,10 @@ return new class extends Migration
             // $table->string('status')->nullable(); // تم حذفه لتفادي التكرار
             // $table->string('tagline')->nullable(); // تم حذفه لتفادي التكرار
             // $table->bigInteger('budget')->nullable(); // تم حذفه لتفادي التكرار
-            $table->bigInteger('revenue')->nullable();
-            $table->string('homepage')->nullable();
-            $table->string('imdb_id')->nullable();
-            $table->bigInteger('tmdb_id')->nullable()->index();
+            // $table->bigInteger('revenue')->nullable(); // تم حذفه لتفادي التكرار
+            // $table->string('homepage')->nullable(); // تم حذفه لتفادي التكرار
+            // $table->string('imdb_id')->nullable(); // تم حذفه لتفادي التكرار
+            // $table->bigInteger('tmdb_id')->nullable()->index(); // تم حذفه لتفادي التكرار
         });
     }
 
@@ -26,7 +26,10 @@ return new class extends Migration
                 // 'status', // تم حذفه لتفادي التكرار
                 // 'tagline', // تم حذفه لتفادي التكرار
                 // 'budget', // تم حذفه لتفادي التكرار
-                'revenue', 'homepage', 'imdb_id', 'tmdb_id'
+                // 'revenue', // تم حذفه لتفادي التكرار
+                // 'homepage', // تم حذفه لتفادي التكرار
+                // 'imdb_id', // تم حذفه لتفادي التكرار
+                // 'tmdb_id', // تم حذفه لتفادي التكرار
             ]);
         });
     }
