@@ -8,6 +8,7 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // $movies = DB::table("");
         return view('home');
     }
 }
