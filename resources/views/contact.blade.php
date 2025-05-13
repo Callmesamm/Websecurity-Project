@@ -84,6 +84,7 @@
                         <span class="info-icon"><i class="bi bi-printer"></i></span>
                         <div>
                             <div class="fw-bold">Fax</div>
+                            
                             <div class="text-muted">(123) 123-456</div>
                         </div>
                     </div>
