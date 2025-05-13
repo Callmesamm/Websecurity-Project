@@ -136,6 +136,9 @@
 </head>
 <body>
     <div class="container">
+        @if (session('status'))
+            <p class="success">{{ session('status') }}</p>
+        @endif
         @if (session('success'))
             <p class="success">{{ session('success') }}</p>
         @endif
