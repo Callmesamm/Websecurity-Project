@@ -86,6 +86,7 @@
                             <div class="fw-bold">Fax</div>
                             
                             <div class="text-muted">(123) 123-456</div>
+                            
                         </div>
                     </div>
                 </div>
