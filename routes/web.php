@@ -18,7 +18,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->middleware('verified')->name('home');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
     Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
@@ -33,7 +33,6 @@ Route::post('/forgot-password', [App\Http\Controllers\Auth\PasswordResetControll
 Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [App\Http\Controllers\Auth\PasswordResetController::class, 'reset'])->name('password.update');
 
-
 // Redirect root to login
 Route::get('/', function () {
     return redirect()->route('login');
@@ -45,7 +44,7 @@ Route::get('/contact', function () {
 
 Route::middleware('auth')->get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+})->middleware('verified')->name('dashboard');
 
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
@@ -53,12 +52,10 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-
     return redirect('/home')->with('success', 'Email verified successfully!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-
     return back()->with('status', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.resend');

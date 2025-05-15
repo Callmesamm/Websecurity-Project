@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
@@ -36,13 +35,12 @@ class RegisterController extends Controller
             event(new Registered($user)); // Trigger verification email
             $message = 'Registration successful! Please check your email to verify your account.';
         } catch (\Exception $e) {
-            // Log the error for debugging
             Log::error('Failed to send verification email: ' . $e->getMessage());
             $message = 'Registration successful, but we couldn’t send the verification email. Please verify your email later.';
         }
 
         Auth::login($user);
 
-        return redirect('/home')->with('success', $message);
+        return redirect()->route('verification.notice')->with('success', $message);
     }
 }
