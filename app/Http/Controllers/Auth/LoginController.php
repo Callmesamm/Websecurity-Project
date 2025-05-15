@@ -17,10 +17,19 @@ class LoginController extends Controller
     }
     public function login(Request $request)
     {
-        // تجاوز التحقق من البيانات، والسماح بالدخول دائماً
-        // يمكنك هنا تسجيل دخول مستخدم وهمي أو أول مستخدم في الجدول
-        \Auth::loginUsingId(1); // تسجيل دخول المستخدم صاحب id=1 دائماً
-        return redirect()->intended('/home');
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+         
+            return redirect('/home')->with('success', 'Login successful!');
+
+        }
+        return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+
     }
 
     public function logout(Request $request)
