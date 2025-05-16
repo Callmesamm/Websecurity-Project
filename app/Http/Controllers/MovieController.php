@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\Show;
 use App\Services\TMDBService;
 
 class MovieController extends Controller
@@ -65,6 +66,22 @@ class MovieController extends Controller
     {
         $movie = Movie::with(['actors', 'images'])->findOrFail($id);
         return view('movies.show', compact('movie'));
+    }
+
+    /**
+     * Get showtimes for a movie.
+     */
+    public function getShowtimes($id)
+    {
+        $movie = Movie::findOrFail($id);
+        $shows = Show::where('movie_id', $id)
+            ->where('date', '>=', now()->format('Y-m-d'))
+            ->orderBy('date')
+            ->orderBy('start_time')
+            ->with('movie')
+            ->get();
+        
+        return response()->json($shows);
     }
 
     /**

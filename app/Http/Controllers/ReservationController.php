@@ -20,9 +20,21 @@ class ReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $showId = $request->query('show_id');
+        if (!$showId) {
+            return redirect()->route('movies.index')->with('error', 'No show selected for reservation.');
+        }
+
+        $show = Show::with('movie')->findOrFail($showId);
+        
+        // Get existing reservations for this show to mark seats as taken
+        $takenSeats = Reservation::where('show_id', $showId)
+            ->pluck('seat_number')
+            ->toArray();
+            
+        return view('reservations.create', compact('show', 'takenSeats'));
     }
 
     /**
