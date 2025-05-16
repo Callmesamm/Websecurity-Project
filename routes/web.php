@@ -40,10 +40,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
 Route::middleware('auth')->get('/dashboard', function () {
     return view('dashboard');
 })->middleware('verified')->name('dashboard');

@@ -19,10 +19,14 @@ class MovieController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // جلب الأفلام من قاعدة البيانات
-        $movies = Movie::with(['actors', 'images'])->paginate(20);
+        $query = Movie::with(['actors', 'images']);
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%{$search}%");
+        }
+        $movies = $query->paginate(20);
 
         // إذا لم يكن هناك أفلام، قم بجلبها من TMDB
         if ($movies->isEmpty()) {

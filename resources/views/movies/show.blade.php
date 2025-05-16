@@ -3,37 +3,48 @@
 @section('title', $movie->title)
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }}" class="card-img-top" style="height: 420px; object-fit: cover;">
-                <div class="card-body">
-                    <h3 class="card-title mb-2">{{ $movie->title }}</h3>
-                    <div class="mb-2"><span class="text-warning">★ {{ number_format($movie->vote_average, 1) }}</span> <span class="text-muted ms-2">{{ $movie->release_date->format('Y') }}</span></div>
+<div class="container-fluid py-5" style="min-height: 80vh;">
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="position-relative w-100" style="max-width: 1200px; min-height: 480px;">
+            <!-- More visible Backdrop -->
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('{{ $movie->backdrop_url ?? $movie->poster_url }}') center/cover no-repeat; filter: blur(3px) brightness(0.55); z-index:1;"></div>
+            <div class="row g-0 align-items-center position-relative rounded-5 shadow-lg overflow-hidden mx-2 mx-md-4" style="backdrop-filter: blur(2px); background: rgba(44,62,80,0.65); z-index:2; min-height: 420px;">
+                <div class="col-md-4 d-flex justify-content-center align-items-center p-4">
+                    <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }}" class="rounded-4 shadow-lg" style="width: 220px; max-width: 100%; height: 320px; object-fit: cover; background: #fff;">
+                </div>
+                <div class="col-md-8 p-4 p-md-5 text-white">
+                    <div class="d-flex align-items-center mb-3 gap-2 flex-wrap">
+                        <span class="badge bg-warning text-dark fw-semibold" style="font-size:1.2rem;"><i class="bi bi-star-fill me-1"></i>{{ number_format($movie->vote_average, 1) }}</span>
+                        <span class="badge bg-secondary" style="font-size:1.1rem;">{{ $movie->release_date->format('Y') }}</span>
+                        <span class="badge bg-success" style="font-size:1.1rem;">{{ $movie->status }}</span>
+                    </div>
+                    <h1 class="fw-bold mb-2" style="font-size:2.5rem;">{{ $movie->title }}</h1>
                     @if($movie->tagline)
-                        <p class="text-primary small mb-2">{{ $movie->tagline }}</p>
+                        <div class="text-info fst-italic mb-3" style="font-size:1.2rem;">{{ $movie->tagline }}</div>
                     @endif
-                    <p class="card-text mb-3">{{ $movie->overview }}</p>
-                    <div class="mb-3">
-                        <strong>المدة:</strong> {{ $movie->runtime }} دقيقة
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-2 text-white">Overview</h5>
+                        <p class="mb-0 text-white-50" style="font-size:1.1rem;">{{ $movie->overview }}</p>
                     </div>
-                    <div class="mb-3">
-                        <strong>الحالة:</strong> {{ $movie->status }}
+                    <div class="row mb-4">
+                        <div class="col-6 col-md-4 mb-2">
+                            <strong>Duration:</strong> <span class="text-white-50">{{ $movie->runtime }} min</span>
+                        </div>
+                        <div class="col-6 col-md-4 mb-2">
+                            <strong>Status:</strong> <span class="text-white-50">{{ $movie->status }}</span>
+                        </div>
+                        <div class="col-12 col-md-4 mb-2">
+                            <strong>IMDB:</strong> <span class="text-white-50">{{ $movie->imdb_id }}</span>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <strong>IMDB:</strong> {{ $movie->imdb_id }}
-                    </div>
-                    
-                    <div class="d-grid gap-2 mb-3">
+                    <div class="d-flex flex-column flex-md-row gap-3 mb-3">
                         @auth
-                            <button type="button" class="btn btn-primary btn-lg" id="bookNowBtn">Book Now</button>
+                            <button type="button" class="btn btn-lg btn-primary px-4 fw-bold shadow" id="bookNowBtn"><i class="bi bi-ticket-perforated me-2"></i>Book Now</button>
                         @else
-                            <a href="{{ route('login') }}?redirect={{ route('movies.show', $movie->id) }}" class="btn btn-primary btn-lg">Login to Book</a>
+                            <a href="{{ route('login') }}?redirect={{ route('movies.show', $movie->id) }}" class="btn btn-lg btn-primary px-4 fw-bold shadow"><i class="bi bi-box-arrow-in-right me-2"></i>Login to Book</a>
                         @endauth
+                        <a href="{{ route('movies.index') }}" class="btn btn-outline-light btn-lg px-4 fw-bold shadow">← Back to Movies List</a>
                     </div>
-                    
-                    <a href="{{ route('movies.index') }}" class="btn btn-secondary w-100">رجوع لقائمة الأفلام</a>
                 </div>
             </div>
         </div>
@@ -64,12 +75,19 @@
     </div>
 </div>
 
+<style>
+@media (max-width: 767px) {
+    .rounded-5 { border-radius: 1.2rem !important; }
+    .p-md-5 { padding: 1.2rem !important; }
+}
+</style>
 @endsection
 
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const bookNowBtn = document.getElementById('bookNowBtn');
+        if (!bookNowBtn) return;
         const showtimesModal = new bootstrap.Modal(document.getElementById('showtimesModal'));
         const showtimesList = document.getElementById('showtimesList');
         
