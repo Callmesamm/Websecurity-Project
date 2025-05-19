@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -13,6 +16,7 @@ class RegisterController extends Controller
     {
         return view('auth.register');
     }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -27,9 +31,16 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        try {
+            event(new Registered($user)); // Trigger verification email
+            $message = 'Registration successful! Please check your email to verify your account.';
+        } catch (\Exception $e) {
+            Log::error('Failed to send verification email: ' . $e->getMessage());
+            $message = 'Registration successful, but we couldn’t send the verification email. Please verify your email later.';
+        }
+
         Auth::login($user);
 
-        return redirect('/home')->with('success', 'Registration successful!');
+        return redirect()->route('verification.notice')->with('success', $message);
     }
-
 }

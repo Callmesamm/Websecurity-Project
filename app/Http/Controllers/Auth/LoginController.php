@@ -37,4 +37,26 @@ class LoginController extends Controller
         Auth::logout();
         return redirect('/login')->with('success', 'Logged out successfully!');
     }
+     
+    /**
+     * Redirect users based on their role
+     */
+    protected function redirectBasedOnRole($user)
+    {
+        // Check if user has admin role
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Welcome to the admin dashboard!');
+        }
+        
+        // Check if user has manager role
+        if ($user->hasRole('manager')) {
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Welcome to the manager dashboard!');
+        }
+        
+        // Default redirect for other users
+        return redirect('/home')->with('success', 'Login successful!');
+    }
 }
+
