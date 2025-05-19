@@ -11,4 +11,8 @@ class HomeController extends Controller
         // $movies = DB::table("");
         return view('home');
     }
+
+    public function ff(){
+        
+    }
 }
