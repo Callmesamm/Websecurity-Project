@@ -126,16 +126,9 @@
                     <i class="fas fa-user-tag text-primary-300"></i>
                     <span>Roles</span>
                 </a>
-                <a href="{{ route('admin.permissions.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.permissions.*') ? 'sidebar-active' : '' }}">
-                    <i class="fas fa-key text-primary-300"></i>
-                    <span>Permissions</span>
-                </a>
                 
                 <p class="text-xs text-primary-300 font-semibold mt-6 mb-2 px-3">CINEMA MANAGEMENT</p>
-                <a href="{{ route('admin.cinemas.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.cinemas.*') ? 'sidebar-active' : '' }}">
-                    <i class="fas fa-building text-primary-300"></i>
-                    <span>Cinemas</span>
-                </a>
+
                 <a href="{{ route('admin.movies.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.movies.*') ? 'sidebar-active' : '' }}">
                     <i class="fas fa-video text-primary-300"></i>
                     <span>Movies</span>
