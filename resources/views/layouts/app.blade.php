@@ -128,7 +128,7 @@
         <div class="container" style="max-width: 100%; padding-left: 6px; padding-right: 6px;">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="https://img.icons8.com/ios-filled/50/000000/movie-projector.png" alt="">
-                CINEMAT
+                CINEMA
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -138,7 +138,7 @@
                     @auth
                         <li class="nav-item"><a class="nav-link" href="{{ route('home') }}"><i class="bi bi-house-door me-1"></i>Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('movies.index') }}"><i class="bi bi-film me-1"></i>Movies</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('profile') }}"><i class="bi bi-speedometer2 me-1"></i>Profile</a></li>
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf

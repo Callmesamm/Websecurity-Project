@@ -3,8 +3,6 @@
 @section('title', 'Login')
 
 @section('content')
-        
-
     <div style="max-width: 400px; margin: 50px auto; padding: 20px;">
         <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Login to Cinema</h2>
         @if(session('error'))
@@ -35,7 +33,7 @@
         </form>
         <p style="text-align: center; margin: 10px 0;"><a href="{{ route('password.request') }}" style="color: #007bff; text-decoration: none;">Forgot your password?</a></p>
         <div style="text-align: center; margin: 15px 0; color: #333;">OR</div>
-        <a href="" class="google-btn" style="display: flex; align-items: center; justify-content: center; text-decoration: none; color: #333; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+        <a href="{{ route('google.login') }}" class="google-btn" style="display: flex; align-items: center; justify-content: center; text-decoration: none; color: #333; border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="height: 20px; margin-right: 10px;">
             Sign in with Google
         </a>
