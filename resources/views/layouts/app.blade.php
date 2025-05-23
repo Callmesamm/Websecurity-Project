@@ -139,6 +139,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('home') }}"><i class="bi bi-house-door me-1"></i>Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('movies.index') }}"><i class="bi bi-film me-1"></i>Movies</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('profile') }}"><i class="bi bi-speedometer2 me-1"></i>Profile</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{{ route(name: 'admin.dashboard') }}"><i class="bi bi-speedometer2 me-1"></i>Admin Dashboard</a></li>
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf

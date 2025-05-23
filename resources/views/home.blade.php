@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="hero-section text-center" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 20px; padding: 80px 20px 60px 20px; color: #fff; position: relative; margin-bottom: 4rem;">
-    <h1 class="display-4 fw-bold mb-4">Welcome to Cinemat</h1>
+    <h1 class="display-4 fw-bold mb-4">Welcome to Our Cinema</h1>
     <div class="d-flex justify-content-center mb-4">
         <div class="btn-group" role="group" aria-label="Toggle Dashboard/Movies">
             <a href="{{ route('profile') }}" class="btn btn-outline-primary">Profile</a>

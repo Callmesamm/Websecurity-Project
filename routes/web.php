@@ -64,12 +64,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
-    Route::view('/permissions/index', 'admin.placeholder')->name('permissions.index');
-    Route::view('/cinemas/index', 'admin.placeholder')->name('cinemas.index');
-    Route::view('/movies/index', 'admin.placeholder')->name('movies.index');
-    Route::view('/screenings/index', 'admin.placeholder')->name('screenings.index');
+   Route::resource('movies', \App\Http\Controllers\Admin\MovieController::class);
+    Route::get('/movies/import/tmdb', [\App\Http\Controllers\Admin\MovieController::class, 'import'])->name('movies.import');
+    Route::post('/movies/import/tmdb/{id}', [\App\Http\Controllers\Admin\MovieController::class, 'importMovie'])->name('movies.import.store');
+    Route::resource('shows', \App\Http\Controllers\Admin\ShowController::class);
     Route::view('/bookings/index', 'admin.placeholder')->name('bookings.index');
 });
+
+
 
 // Redirect root to login
 Route::get('/', function () {

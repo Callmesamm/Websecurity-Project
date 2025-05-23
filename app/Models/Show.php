@@ -21,10 +21,10 @@ class Show extends Model
 
     protected $with = ['movie', 'hall'];  // This will eager load the relationships
 
-    public function movie(): BelongsTo
-    {
-        return $this->belongsTo(Movie::class);
-    }
+    public function movie()
+{
+    return $this->belongsTo(Movie::class);
+}
 
     public function hall(): BelongsTo
     {

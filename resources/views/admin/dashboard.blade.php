@@ -53,29 +53,6 @@
             </div>
         </div>
         
-        <!-- Cinemas Card -->
-        <div class="bg-white rounded-xl shadow-sm p-6 dashboard-card border border-neutral-100">
-            <div class="flex items-center">
-                <div class="p-3 rounded-full bg-accent-50 text-accent-600">
-                    <i class="fas fa-building fa-lg"></i>
-                </div>
-                <div class="ml-4">
-                    <h3 class="text-sm font-medium text-neutral-500">Total Cinemas</h3>
-                    <div class="flex items-center">
-                        <p class="text-2xl font-bold text-neutral-800">{{ $cinemaCount ?? 0 }}</p>
-                        <span class="ml-2 text-xs font-medium text-yellow-500 bg-yellow-50 px-2 py-1 rounded-full">
-                            <i class="fas fa-equals mr-1"></i>0%
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-4 pt-4 border-t border-neutral-100">
-                <a href="{{ route('admin.cinemas.index') }}" class="text-sm text-accent-600 hover:text-accent-700 font-medium">
-                    View all cinemas <i class="fas fa-arrow-right ml-1"></i>
-                </a>
-            </div>
-        </div>
-        
         <!-- Bookings Card -->
         <div class="bg-white rounded-xl shadow-sm p-6 dashboard-card border border-neutral-100">
             <div class="flex items-center">
@@ -223,15 +200,6 @@
                 </div>
             </a>
             
-            <a href="{{ route('admin.cinemas.index') }}" class="flex items-center p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors border border-neutral-100">
-                <div class="p-2 rounded-md bg-accent-100 text-accent-600 mr-3">
-                    <i class="fas fa-building"></i>
-                </div>
-                <div>
-                    <h4 class="text-sm font-medium text-neutral-800">Manage Cinemas</h4>
-                    <p class="text-xs text-neutral-500">Add or edit cinema locations</p>
-                </div>
-            </a>
             
             <a href="{{ route('admin.movies.index') }}" class="flex items-center p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors border border-neutral-100">
                 <div class="p-2 rounded-md bg-amber-100 text-amber-600 mr-3">

@@ -8,13 +8,14 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
+
 class AdminController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        // If you want to restrict to admin role, uncomment the line below
-        // $this->middleware('role:admin');
+        $this->middleware(\App\Http\Middleware\CheckRole::class . ':admin');
+
     }
     
     public function dashboard()

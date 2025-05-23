@@ -10,15 +10,25 @@ use App\Services\TMDBService;
 
 class Movie extends Model
 {
-    protected $fillable = [
-        'title',
-        'storyline',
-        'image',
-        'release_date',
-        'rating',
-        'duration',
-        'category_id'
-    ];
+   protected $fillable = [
+    'title',
+    'original_title',
+    'overview',
+    'poster_path',
+    'backdrop_path',
+    'release_date',
+    'runtime',
+    'vote_average',
+    'vote_count',
+    'status',
+    'tagline',
+    'budget',
+    'revenue',
+    'homepage',
+    'imdb_id',
+    'tmdb_id',
+    'category_id'
+];
 
     protected $casts = [
         'release_date' => 'date',
@@ -59,4 +69,9 @@ class Movie extends Model
     {
         return app(TMDBService::class)->getImageUrl($this->backdrop_path);
     }
+    public function shows()
+{
+    return $this->hasMany(Show::class);  // or Screening::class depending on your model name
+}
+
 }

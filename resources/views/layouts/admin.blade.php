@@ -133,7 +133,7 @@
                     <i class="fas fa-video text-primary-300"></i>
                     <span>Movies</span>
                 </a>
-                <a href="{{ route('admin.screenings.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.screenings.*') ? 'sidebar-active' : '' }}">
+                <a href="{{ route('admin.shows.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.screenings.*') ? 'sidebar-active' : '' }}">
                     <i class="fas fa-calendar-alt text-primary-300"></i>
                     <span>Screenings</span>
                 </a>
@@ -164,6 +164,9 @@
                         <p class="text-sm text-neutral-500">Welcome back, {{ Auth::user()->name }}</p>
                     </div>
                     <div class="flex items-center space-x-4">
+                         <a href="{{ route('home') }}" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                      <i class="fas fa-home mr-2"></i>Return to Home
+                      </a>
                         <button class="p-2 rounded-full bg-neutral-100 text-neutral-600 hover:bg-neutral-200 transition-colors">
                             <i class="fas fa-bell"></i>
                         </button>
