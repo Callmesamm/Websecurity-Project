@@ -7,7 +7,7 @@
     <h1 class="display-4 fw-bold mb-4">Welcome to Cinemat</h1>
     <div class="d-flex justify-content-center mb-4">
         <div class="btn-group" role="group" aria-label="Toggle Dashboard/Movies">
-            <a href="{{ route('dashboard') }}" class="btn btn-outline-primary">Dashboard</a>
+            <a href="{{ route('profile') }}" class="btn btn-outline-primary">Profile</a>
             <a href="{{ route('movies.index') }}" class="btn btn-primary">Movies</a>
         </div>
     </div>
