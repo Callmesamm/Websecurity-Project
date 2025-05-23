@@ -5,37 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Services\TMDBService;
 
 class Movie extends Model
 {
     protected $fillable = [
-        'tmdb_id',
         'title',
-        'original_title',
-        'overview',
-        'poster_path',
-        'backdrop_path',
+        'storyline',
+        'image',
         'release_date',
-        'runtime',
-        'vote_average',
-        'vote_count',
-        'status',
-        'tagline',
-        'budget',
-        'revenue',
-        'homepage',
-        'imdb_id'
+        'rating',
+        'duration',
+        'category_id'
     ];
 
     protected $casts = [
         'release_date' => 'date',
-        'runtime' => 'integer',
-        'vote_average' => 'float',
-        'vote_count' => 'integer',
-        'budget' => 'integer',
-        'revenue' => 'integer'
+        'duration' => 'integer',
+        'rating' => 'float'
     ];
+
+    /**
+     * Get the category that owns the movie.
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function actors(): BelongsToMany
     {
