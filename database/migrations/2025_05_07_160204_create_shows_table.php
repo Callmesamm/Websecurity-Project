@@ -10,25 +10,20 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('shows', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('movie_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->decimal('price', 8, 2);
-            $table->integer('total_seats');
-            $table->integer('available_seats');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::table('shows', function (Blueprint $table) {
+        // First check if the column already exists
+        if (!Schema::hasColumn('shows', 'hall_id')) {
+            $table->foreignId('hall_id')->after('movie_id')->nullable()->constrained('halls')->onDelete('set null');
+        }
+    });
+}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('shows');
-    }
+public function down(): void
+{
+    Schema::table('shows', function (Blueprint $table) {
+        $table->dropForeign(['hall_id']);
+        $table->dropColumn('hall_id');
+    });
+}
 };
