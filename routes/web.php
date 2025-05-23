@@ -5,9 +5,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\ProfileController; // Ensure this is included
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -30,23 +34,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
     Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
     Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
+    Route::get('/profile', [ProfileController::class, 'show'])->middleware('verified')->name('profile');
+    Route::patch('/profile', [ProfileController::class, 'update'])->middleware('verified')->name('profile.update');
 });
 
 // Password reset routes
-Route::get('/forgot-password', [App\Http\Controllers\Auth\PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
-Route::post('/forgot-password', [App\Http\Controllers\Auth\PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\PasswordResetController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [App\Http\Controllers\Auth\PasswordResetController::class, 'reset'])->name('password.update');
+Route::get('/forgot-password', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
-// Redirect root to login
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
-Route::middleware('auth')->get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('verified')->name('dashboard');
-
+// Email verification routes
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
@@ -60,3 +58,20 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('status', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+
+// Admin routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::view('/permissions/index', 'admin.placeholder')->name('permissions.index');
+    Route::view('/cinemas/index', 'admin.placeholder')->name('cinemas.index');
+    Route::view('/movies/index', 'admin.placeholder')->name('movies.index');
+    Route::view('/screenings/index', 'admin.placeholder')->name('screenings.index');
+    Route::view('/bookings/index', 'admin.placeholder')->name('bookings.index');
+});
+
+// Redirect root to login
+Route::get('/', function () {
+    return redirect()->route('login');
+});

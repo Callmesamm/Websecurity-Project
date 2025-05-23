@@ -42,33 +42,39 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'show_id' => 'required|exists:shows,id',
-            'seat_number' => 'required|integer|min:1',
-        ]);
+    $validated = $request->validate([
+        'show_id' => 'required|exists:shows,id',
+        'seat_number' => 'required|integer|min:1',
+    ]);
 
-        $show = Show::findOrFail($request->show_id);
-        // تحقق أن المقعد غير محجوز مسبقاً
-        $alreadyReserved = Reservation::where('show_id', $show->id)
-            ->where('seat_number', $request->seat_number)
-            ->exists();
-        if ($alreadyReserved) {
-            return back()->withErrors(['seat_number' => 'This seat is already reserved.']);
-        }
-        // تحقق من توفر المقاعد
-        if ($show->available_seats <= 0) {
-            return back()->withErrors(['seat_number' => 'No available seats for this show.']);
-        }
-        // إنشاء الحجز
-        $reservation = Reservation::create([
-            'user_id' => Auth::id(),
-            'show_id' => $show->id,
-            'seat_number' => $request->seat_number,
-            'price' => $show->price,
-        ]);
-        // تحديث عدد المقاعد المتاحة
-        $show->decrement('available_seats');
-        return back()->with('success', 'Reservation successful!');
+    $show = Show::with('hall')->findOrFail($validated['show_id']);
+    
+    // Check if the seat is already reserved
+    $alreadyReserved = Reservation::where('show_id', $show->id)
+        ->where('seat_number', $validated['seat_number'])
+        ->exists();
+        
+    if ($alreadyReserved) {
+        return back()->with('error', 'This seat is already reserved.');
+    }
+    
+    // Check if the seat number is valid for this hall
+    if ($validated['seat_number'] > $show->hall->capacity) {
+        return back()->with('error', 'Invalid seat number for this hall.');
+    }
+    
+    // Create the reservation
+    $reservation = Reservation::create([
+        'user_id' => Auth::id(),
+        'show_id' => $show->id,
+        'seat_number' => $validated['seat_number'],
+        'price' => $show->price,
+    ]);
+    
+    // Update available seats
+    $show->decrement('available_seats');
+    
+    return back()->with('success', 'Reservation successful!');
     }
 
     /**

@@ -21,9 +21,9 @@ return new class extends Migration
         });
 
         // إضافة علاقة بين العروض وقاعات العرض
-        Schema::table('shows', function (Blueprint $table) {
-            $table->foreignId('hall_id')->after('movie_id')->constrained()->onDelete('cascade');
-        });
+        // Schema::table('shows', function (Blueprint $table) {
+        //     $table->foreignId('hall_id')->after('movie_id')->constrained()->onDelete('cascade');
+        // });
     }
 
     /**

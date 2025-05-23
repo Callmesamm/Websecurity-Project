@@ -5,35 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Show;
-use App\Services\TMDBService;
 
 class MovieController extends Controller
 {
-    protected $tmdbService;
-
-    public function __construct(TMDBService $tmdbService)
-    {
-        $this->tmdbService = $tmdbService;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = Movie::with(['actors', 'images']);
+        $query = Movie::query();
+        
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('title', 'like', "%{$search}%");
         }
+        
         $movies = $query->paginate(20);
-
-        // إذا لم يكن هناك أفلام، قم بجلبها من TMDB
-        if ($movies->isEmpty()) {
-            $this->syncMovies();
-            $movies = Movie::with(['actors', 'images'])->paginate(20);
-        }
-
         return view('movies.index', compact('movies'));
     }
 
@@ -53,12 +40,13 @@ class MovieController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'storyline' => 'nullable|string',
-            'image' => 'nullable|url',
-            'category' => 'nullable|string|max:255',
+            'image' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
             'rating' => 'nullable|numeric|min:0|max:5',
             'release_date' => 'nullable|date',
             'duration' => 'nullable|integer|min:1',
         ]);
+        
         Movie::create($request->all());
         return redirect()->route('movies.index')->with('success', 'Movie added successfully!');
     }
@@ -68,7 +56,7 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        $movie = Movie::with(['actors', 'images'])->findOrFail($id);
+        $movie = Movie::findOrFail($id);
         return view('movies.show', compact('movie'));
     }
 
@@ -93,7 +81,8 @@ class MovieController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $movie = Movie::findOrFail($id);
+        return view('movies.edit', compact('movie'));
     }
 
     /**
@@ -101,7 +90,20 @@ class MovieController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'storyline' => 'nullable|string',
+            'image' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
+            'rating' => 'nullable|numeric|min:0|max:5',
+            'release_date' => 'nullable|date',
+            'duration' => 'nullable|integer|min:1',
+        ]);
+        
+        $movie = Movie::findOrFail($id);
+        $movie->update($request->all());
+        
+        return redirect()->route('movies.index')->with('success', 'Movie updated successfully!');
     }
 
     /**
@@ -109,23 +111,9 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        //
-    }
-
-    protected function syncMovies()
-    {
-        // جلب صفحتين من الأفلام الشائعة
-        for ($page = 1; $page <= 2; $page++) {
-            $movies = $this->tmdbService->getPopularMovies($page);
-            
-            // تحقق من وجود results
-            if (!isset($movies['results'])) {
-                dd($movies); // سيعرض محتوى الاستجابة ويساعدك في معرفة الخطأ
-            }
-
-            foreach ($movies['results'] as $movieData) {
-                $this->tmdbService->syncMovie($movieData['id']);
-            }
-        }
+        $movie = Movie::findOrFail($id);
+        $movie->delete();
+        
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully!');
     }
 }

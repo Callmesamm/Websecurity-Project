@@ -3,19 +3,35 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Show extends Model
 {
     protected $fillable = [
-        'movie_id', 'date', 'start_time', 'end_time', 'price', 'total_seats', 'available_seats'
+        'movie_id', 
+        'hall_id',  // Add this line
+        'date', 
+        'start_time', 
+        'end_time', 
+        'price', 
+        'total_seats', 
+        'available_seats'
     ];
 
-    public function movie()
+    protected $with = ['movie', 'hall'];  // This will eager load the relationships
+
+    public function movie(): BelongsTo
     {
         return $this->belongsTo(Movie::class);
     }
 
-    public function reservations()
+    public function hall(): BelongsTo
+    {
+        return $this->belongsTo(Hall::class);
+    }
+
+    public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
     }
