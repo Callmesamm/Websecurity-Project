@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Reservation;
 use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
@@ -28,6 +29,24 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         return view('profile', compact('user'));
+    }
+
+    /**
+     * Display the user's reservations.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function reservations()
+    {
+        $user = Auth::user();
+        $reservations = $user->reservations()
+            ->with(['show' => function($query) {
+                $query->with('movie');
+            }])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
+        return view('reservations.index', compact('reservations', 'user'));
     }
 
     /**

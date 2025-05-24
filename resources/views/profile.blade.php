@@ -94,7 +94,15 @@
                 <a href="{{ route('home') }}" class="btn btn-outline-secondary w-100 rounded-pill">Cancel</a>
             </form>
             <div class="mt-3 text-center">
-                <a href="" class="btn btn-link text-decoration-none" style="color:#2980b9;"><i class="bi bi-ticket-perforated me-2"></i>View My Reservations</a>
+                <a href="{{ route('reservations.index') }}" class="btn btn-link text-decoration-none d-block mb-2" style="color:#2980b9;">
+                    <i class="bi bi-ticket-perforated me-2"></i>View My Reservations
+                </a>
+                
+                @if(auth()->user()->roles->contains('id', 1))
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-primary d-block">
+                        <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+                    </a>
+                @endif
             </div>
         </div>
     </div>

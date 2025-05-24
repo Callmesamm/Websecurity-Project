@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
     Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
     Route::get('/movies/{movie}/showtimes', [MovieController::class, 'getShowtimes'])->name('movies.showtimes');
+    Route::get('/reservations', [ProfileController::class, 'reservations'])->name('reservations.index');
     Route::get('/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
     Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
