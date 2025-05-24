@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ProfileController; // Ensure this is included
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\PaymentController;
 
 
 // Public routes
@@ -99,5 +100,11 @@ Route::prefix('manager')
 
         Route::view('/bookings/index', 'manager.placeholder')->name('bookings.index');
     });
+    Route::get('/my-reservations', [ReservationController::class, 'index'])->name('reservations.index');
+
+    
+
+Route::post('/payment', [PaymentController::class, 'process'])->name('payment.process')->middleware('auth');
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

@@ -14,7 +14,14 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+       $user = auth()->user();
+
+    $reservations = Reservation::where('user_id', $user->id)
+        ->with(['show.movie', 'show.hall']) // eager load relations used in blade
+        ->orderBy('created_at', 'desc')
+        ->paginate(9); // paginate or get all
+
+    return view('reservations.index', compact('reservations'));
     }
 
     /**

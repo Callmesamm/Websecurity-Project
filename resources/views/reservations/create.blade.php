@@ -11,6 +11,7 @@
                     <h3 class="mb-0">Select Seats</h3>
                 </div>
                 <div class="card-body">
+                    <!-- Movie info -->
                     <div class="movie-info mb-4">
                         <div class="d-flex align-items-center mb-3">
                             <div class="me-3">
@@ -31,6 +32,7 @@
                         </div>
                     </div>
 
+                    <!-- Seating plan -->
                     <div class="mb-4">
                         <h5 class="text-center mb-3">Seating Plan</h5>
                         <div class="d-flex justify-content-center align-items-center mb-3">
@@ -77,7 +79,8 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('reservations.store') }}" method="POST" id="reservationForm">
+                    <!-- Reservation form -->
+                    <form action="{{ route('payment.process') }}" method="POST" id="payment-form">
                         @csrf
                         <input type="hidden" name="show_id" value="{{ $show->id }}">
                         <input type="hidden" name="seat_number" id="selected_seat" value="">
@@ -89,10 +92,26 @@
                                 </div>
                             </div>
                         </div>
-                        
+
+                        <!-- Visa card payment fields -->
+                        <div class="mb-3">
+                            <label for="card_number" class="form-label">Card Number (Visa only)</label>
+                            <input type="text" name="card_number" id="card_number" class="form-control" placeholder="4111 1111 1111 1111" required pattern="4[0-9]{12}(?:[0-9]{3})?" title="Visa card number">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="expiry" class="form-label">Expiry Date (MM/YY)</label>
+                            <input type="text" name="expiry" id="expiry" class="form-control" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/?([0-9]{2})" title="MM/YY format">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" name="cvv" id="cvv" class="form-control" placeholder="123" required pattern="[0-9]{3}" title="3 digit CVV">
+                        </div>
+
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('movies.show', $show->movie->id) }}" class="btn btn-secondary">Back</a>
-                            <button type="submit" class="btn btn-primary" id="bookButton" disabled>Complete Booking</button>
+                            <button type="submit" class="btn btn-primary" id="bookButton" disabled>Pay ${{ number_format($show->price, 2) }} and Book</button>
                         </div>
                     </form>
                 </div>
@@ -197,31 +216,31 @@
         const selectedSeatDisplay = document.getElementById('selected_seat_display');
         const bookButton = document.getElementById('bookButton');
         let selectedSeat = null;
-        
+
         seats.forEach(seat => {
             seat.addEventListener('click', function() {
                 // Reset previously selected seat
                 if (selectedSeat) {
                     selectedSeat.classList.remove('selected');
                 }
-                
+
                 // Set new selected seat
                 seat.classList.add('selected');
                 selectedSeat = seat;
-                
+
                 // Update form input with seat number
                 const seatNumber = seat.getAttribute('data-seat-number');
                 selectedSeatInput.value = seatNumber;
-                
+
                 // Update display
                 const rowChar = String.fromCharCode(65 + Math.floor((seatNumber - 1) / 10));
                 const seatInRow = ((seatNumber - 1) % 10) + 1;
                 selectedSeatDisplay.textContent = `${rowChar}${seatInRow} (Seat #${seatNumber})`;
-                
-                // Enable book button
+
+                // Enable book button only if a seat selected
                 bookButton.disabled = false;
             });
         });
     });
 </script>
-@endsection 
+@endsection
