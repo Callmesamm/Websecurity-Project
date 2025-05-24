@@ -20,8 +20,10 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
-Route::get('/auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+
+// Google OAuth Routes
+Route::get('/auth/google', [\App\Http\Controllers\Auth\GoogleLoginController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
@@ -71,8 +73,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('shows', \App\Http\Controllers\Admin\ShowController::class);
     Route::view('/bookings/index', 'admin.placeholder')->name('bookings.index');
 });
-
-
 
 // Redirect root to login
 Route::get('/', function () {

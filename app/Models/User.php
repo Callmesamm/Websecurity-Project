@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_name',
         'email',
         'password',
+        'google_id',
     ];
 
     /**
@@ -115,16 +116,24 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function getIsAdminAttribute()
-{
-    return $this->role === 'admin';
-}
+    {
+        return $this->role === 'admin';
+    }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 
+    // Relationship with social accounts
+    public function socialAccounts()
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
 
-public function reservations()
-{
-    return $this->hasMany(Reservation::class);
-}
-
-
+    // Check if user has a specific social account
+    public function hasSocialAccount($provider)
+    {
+        return $this->socialAccounts()->where('provider', $provider)->exists();
+    }
 }
