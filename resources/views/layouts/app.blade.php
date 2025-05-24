@@ -142,6 +142,9 @@
                         @if(auth()->user()->roles->contains('id', 1))
                             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2 me-1"></i>Admin Dashboard</a></li>
                         @endif
+                        @if(auth()->user()->roles->contains('id', 2))
+                        <a href="{{ route('manager.dashboard') }}" class="text-white hover:text-gray-200">Manager Dashboard</a>
+                        @endif
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
@@ -149,6 +152,7 @@
                             </form>
                         </li>
                     @else
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}"><i class="bi bi-house-door me-1"></i>Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}"><i class="bi bi-person-plus me-1"></i>Register</a></li>
                     @endauth

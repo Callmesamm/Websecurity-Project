@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController; // Ensure this is included
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
+
 // Public routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -74,7 +75,29 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/bookings/index', 'admin.placeholder')->name('bookings.index');
 });
 
-// Redirect root to login
-Route::get('/', function () {
-    return redirect()->route('login');
+// Admin routes
+Route::prefix('manager')->name('manager.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+   Route::resource('movies', \App\Http\Controllers\Admin\MovieController::class);
+    Route::get('/movies/import/tmdb', [\App\Http\Controllers\Admin\MovieController::class, 'import'])->name('movies.import');
+    Route::post('/movies/import/tmdb/{id}', [\App\Http\Controllers\Admin\MovieController::class, 'importMovie'])->name('movies.import.store');
+    Route::resource('shows', \App\Http\Controllers\Admin\ShowController::class);
+    Route::view('/bookings/index', 'admin.placeholder')->name('bookings.index');
 });
+// Manager routes
+Route::prefix('manager')
+    ->name('manager.')
+    ->middleware(['auth', \App\Http\Middleware\CheckRole::class . ':manager']) // Assuming you have a 'role' middleware
+    ->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Manager\ManagerController::class, 'dashboard'])->name('dashboard');
+
+        Route::resource('movies', \App\Http\Controllers\Manager\MovieController::class);
+        Route::get('/movies/import/tmdb', [\App\Http\Controllers\Manager\MovieController::class, 'import'])->name('movies.import');
+        Route::post('/movies/import/tmdb/{id}', [\App\Http\Controllers\Manager\MovieController::class, 'importMovie'])->name('movies.import.store');
+
+        Route::resource('shows', \App\Http\Controllers\Manager\ShowController::class);
+
+        Route::view('/bookings/index', 'manager.placeholder')->name('bookings.index');
+    });
+
+Route::get('/', [HomeController::class, 'index'])->name('home');

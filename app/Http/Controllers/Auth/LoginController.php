@@ -51,7 +51,7 @@ class LoginController extends Controller
 
         // Check if user has manager role
         if ($user->hasRole('manager')) {
-            return redirect()->route('admin.dashboard')
+            return redirect()->route('manager.dashboard')
                 ->with('success', 'Welcome to the manager dashboard!');
         }
 

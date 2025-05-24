@@ -98,7 +98,7 @@
             <div class="p-6 border-b border-white/10">
                 <div class="flex items-center space-x-3">
                     <i class="fas fa-film text-2xl text-primary-300"></i>
-                    <h1 class="text-xl font-bold tracking-wider">CINEMA ADMIN</h1>
+                    <h1 class="text-xl font-bold tracking-wider">CINEMA MANGER</h1>
                 </div>
             </div>
             <div class="p-4">
@@ -108,32 +108,25 @@
                     </div>
                     <div>
                         <p class="font-medium">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-primary-200">Administrator</p>
+                        <p class="text-xs text-primary-200">Manager</p>
                     </div>
                 </div>
             </div>
             <nav class="mt-2 px-4">
                 <p class="text-xs text-primary-300 font-semibold mb-2 px-3">MAIN MENU</p>
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.dashboard') ? 'sidebar-active' : '' }}">
+                <a href="{{ route('manager.dashboard') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.dashboard') ? 'sidebar-active' : '' }}">
                     <i class="fas fa-tachometer-alt text-primary-300"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('admin.users.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.users.*') ? 'sidebar-active' : '' }}">
-                    <i class="fas fa-users text-primary-300"></i>
-                    <span>Users</span>
-                </a>
-                <a href="{{ route('admin.roles.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.roles.*') ? 'sidebar-active' : '' }}">
-                    <i class="fas fa-user-tag text-primary-300"></i>
-                    <span>Roles</span>
-                </a>
+               
                 
                 <p class="text-xs text-primary-300 font-semibold mt-6 mb-2 px-3">CINEMA MANAGEMENT</p>
 
-                <a href="{{ route('admin.movies.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.movies.*') ? 'sidebar-active' : '' }}">
+                <a href="{{ route('manager.movies.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.movies.*') ? 'sidebar-active' : '' }}">
                     <i class="fas fa-video text-primary-300"></i>
                     <span>Movies</span>
                 </a>
-                <a href="{{ route('admin.shows.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.screenings.*') ? 'sidebar-active' : '' }}">
+                <a href="{{ route('manager.shows.index') }}" class="flex items-center space-x-3 py-3 px-3 rounded-lg mb-1 hover:bg-white/5 {{ request()->routeIs('admin.screenings.*') ? 'sidebar-active' : '' }}">
                     <i class="fas fa-calendar-alt text-primary-300"></i>
                     <span>Screenings</span>
             </nav>

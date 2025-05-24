@@ -27,6 +27,7 @@ class MovieController extends Controller
             ->paginate(12);
         
         return view('admin.movies.index', compact('movies'));
+        
     }
     
     public function create()
@@ -35,40 +36,40 @@ class MovieController extends Controller
         return view('admin.movies.create', compact('categories'));
     }
     
-    public function store(Request $request)
-    {
+   public function store(Request $request)
+{
+    if ($request->filled('tmdb_id')) {
+        // If importing from TMDB, only validate tmdb_id
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'tmdb_id' => 'required|string',
+        ]);
+
+        try {
+            $movie = $this->tmdbService->syncMovie($request->tmdb_id);
+            return redirect()->route('admin.movies.index')->with('success', 'Movie imported successfully from TMDB.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['tmdb_id' => 'Failed to import movie from TMDB: ' . $e->getMessage()]);
+        }
+    } else {
+        // Manual entry requires title and other fields (tmdb_id is not required)
+        $validated = $request->validate([
+            'orginal_title' => 'required|string|max:255',
             'overview' => 'nullable|string',
             'release_date' => 'nullable|date',
-            'duration' => 'nullable|integer|min:1',
+            'runtime' => 'nullable|integer|min:1',
             'category_id' => 'nullable|exists:categories,id',
             'poster_path' => 'nullable|string',
-            'tmdb_id' => 'nullable|string',
+            'imdb_id' => 'nullable|integer', 
+            'vote_average' => 'nullable|numeric',
+            'vote_count' => 'nullable|integer',
         ]);
-        
-        // If TMDB ID is provided, fetch data from TMDB
-        if ($request->filled('tmdb_id')) {
-            try {
-                $movie = $this->tmdbService->syncMovie($request->tmdb_id);
-                return redirect()->route('admin.movies.index')->with('success', 'Movie imported successfully from TMDB.');
-            } catch (\Exception $e) {
-                return back()->withErrors(['tmdb_id' => 'Failed to import movie from TMDB: ' . $e->getMessage()]);
-            }
-        }
-        
-        // Otherwise create movie with provided data
-        $movie = Movie::create([
-            'title' => $request->title,
-            'overview' => $request->overview,
-            'release_date' => $request->release_date,
-            'duration' => $request->duration,
-            'category_id' => $request->category_id,
-            'poster_path' => $request->poster_path,
-        ]);
-        
+
+        $movie = Movie::create($validated);
+
         return redirect()->route('admin.movies.index')->with('success', 'Movie created successfully.');
     }
+}
+
     
     public function edit($id)
     {
@@ -86,9 +87,12 @@ class MovieController extends Controller
             'title' => 'required|string|max:255',
             'overview' => 'nullable|string',
             'release_date' => 'nullable|date',
-            'duration' => 'nullable|integer|min:1',
+            'runtime' => 'nullable|integer|min:1',
             'category_id' => 'nullable|exists:categories,id',
             'poster_path' => 'nullable|string',
+            'vote_average' => 'nullable|numeric',
+            'vote_count' => 'nullable|integer',
+            
         ]);
         
         $movie->update($validated);

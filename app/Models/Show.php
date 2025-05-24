@@ -19,6 +19,10 @@ class Show extends Model
         'available_seats'
     ];
 
+    protected $casts = [
+    'start_time' => 'datetime',
+];
+
     protected $with = ['movie', 'hall'];  // This will eager load the relationships
 
     public function movie()
