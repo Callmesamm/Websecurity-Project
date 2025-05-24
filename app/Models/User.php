@@ -82,7 +82,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasRole($roleName)
     {
-        return $this->roles->contains('name', $roleName);
+        return $this->roles()->where('name', $roleName)->exists();
     }
 
     /**
@@ -117,7 +117,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getIsAdminAttribute()
     {
-        return $this->role === 'admin';
+        return $this->hasRole('admin');
     }
 
     public function reservations()
